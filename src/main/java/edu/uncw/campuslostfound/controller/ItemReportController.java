@@ -19,4 +19,21 @@ package edu.uncw.campuslostfound.controller;
  */
 public class ItemReportController {
 
+    private final edu.uncw.campuslostfound.service.ItemReportService service;
+
+    public ItemReportController(
+            edu.uncw.campuslostfound.service.ItemReportService service) {
+        this.service = service;
+    }
+
+    public String submitLostItem(
+            edu.uncw.campuslostfound.model.LostItemReport report) {
+
+        try {
+            service.submitLostItem(report);
+            return "Lost item report submitted for security review.";
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
+    }
 }

@@ -19,4 +19,14 @@ package edu.uncw.campuslostfound.repository;
  */
 public class ItemReportRepository {
 
+    private final java.util.List<edu.uncw.campuslostfound.model.ItemReport> reports
+            = new java.util.ArrayList<>();
+
+    public void save(edu.uncw.campuslostfound.model.ItemReport report) {
+        reports.add(report);
+    }
+
+    public java.util.List<edu.uncw.campuslostfound.model.ItemReport> getAllReports() {
+        return reports;
+    }
 }
