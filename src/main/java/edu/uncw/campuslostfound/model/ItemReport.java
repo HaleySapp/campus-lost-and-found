@@ -19,4 +19,15 @@ package edu.uncw.campuslostfound.model;
  */
 public class ItemReport {
 
+    private String itemName;
+    private String category;
+    private String date;
+    private String location;
+    private String color;
+    private String brand;
+    private String description;
+    private String photoPath;
+    private String contactInfo;
+    private ReportStatus status;
+
 }
