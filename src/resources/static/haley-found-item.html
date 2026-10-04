@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Lost & Found</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background-color: #17324d;
+            color: white;
+            padding: 22px 30px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        header p {
+            margin: 6px 0 0;
+        }
+
+        main {
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .welcome h2 {
+            margin-top: 0;
+        }
+
+        button {
+            background-color: #17324d;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #244d72;
+        }
+
+        #posts {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .post {
+            background: white;
+            padding: 22px;
+            margin-bottom: 18px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .post h3 {
+            margin-top: 0;
+        }
+
+        .category {
+            font-size: 14px;
+            font-weight: bold;
+            color: #52606d;
+        }
+
+        .details {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .match-button {
+            margin-top: 8px;
+        }
+
+        #itemDetails {
+            display: none;
+            background: white;
+            padding: 30px;
+            margin-top: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        #successMessage {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            line-height: 1.5;
+        }
+
+        #errorMessage {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            background-color: #fdecea;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Campus Lost & Found</h1>
+    <p>Community Lost Item Feed</p>
+</header>
+
+<main>
+
+    <section class="welcome">
+        <h2>Found Something on Campus?</h2>
+
+        <p>
+            Browse recent lost-item posts to see if the item you found
+            matches something reported by another community member.
+        </p>
+
+        <button onclick="showPosts()">View Posts</button>
+    </section>
+
+    <section id="posts">
+
+        <h2>Recent Lost Items</h2>
+
+        <div class="post">
+            <div class="category">Water Bottle</div>
+
+            <h3>Blue Hydro Flask</h3>
+
+            <div class="details">
+                <strong>Location Lost:</strong> Library<br>
+                <strong>Color:</strong> Blue<br>
+                <strong>Description:</strong> Blue metal bottle with several stickers.
+            </div>
+
+            <button class="match-button" onclick="openMatchingItem()">
+                View Item
+            </button>
+        </div>
+
+        <div class="post">
+            <div class="category">Electronics</div>
+
+            <h3>Black Wireless Earbuds</h3>
+
+            <div class="details">
+                <strong>Location Lost:</strong> Student Center<br>
+                <strong>Color:</strong> Black<br>
+                <strong>Description:</strong> Wireless earbuds inside a small black charging case.
+            </div>
+
+            <button class="match-button" onclick="showIncorrectMatch()">
+                View Item
+            </button>
+        </div>
+
+    </section>
+
+    <section id="itemDetails">
+
+        <h2>Blue Hydro Flask</h2>
+
+        <p><strong>Category:</strong> Water Bottle</p>
+        <p><strong>Location Lost:</strong> Library</p>
+        <p><strong>Color:</strong> Blue</p>
+        <p><strong>Description:</strong> Blue metal bottle with several stickers.</p>
+
+        <p>
+            If this description matches the item you found, select
+            <strong>Have Found</strong>.
+        </p>
+
+        <button onclick="confirmFound()">Have Found</button>
+
+        <div id="successMessage">
+            <strong>Thank you!</strong><br><br>
+            This item has been identified as a possible match.
+            Please take the found item to the Campus Security Office
+            so staff can verify the item and complete the return process.
+        </div>
+
+    </section>
+
+    <div id="errorMessage">
+        <strong>Item does not match.</strong><br>
+        Please return to the community posts and continue searching for
+        the correct lost-item report.
+    </div>
+
+</main>
+
+<script>
+    function showPosts() {
+        document.getElementById("posts").style.display = "block";
+        document.getElementById("itemDetails").style.display = "none";
+        document.getElementById("errorMessage").style.display = "none";
+    }
+
+    function openMatchingItem() {
+        document.getElementById("posts").style.display = "none";
+        document.getElementById("errorMessage").style.display = "none";
+        document.getElementById("itemDetails").style.display = "block";
+    }
+
+    function showIncorrectMatch() {
+        document.getElementById("itemDetails").style.display = "none";
+        document.getElementById("errorMessage").style.display = "block";
+    }
+
+    function confirmFound() {
+        document.getElementById("successMessage").style.display = "block";
+    }
+</script>
+
+</body>
+</html>
