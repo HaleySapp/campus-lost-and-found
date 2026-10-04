@@ -1,4 +1,5 @@
 package edu.uncw.campuslostfound.service;
+import org.springframework.stereotype.Service;
 
 /**
  * Contains the business logic for lost and found item reports.
@@ -18,6 +19,7 @@ package edu.uncw.campuslostfound.service;
  * - Lost item report: Tyler
  * - Found item report: Haley
  */
+@Service
 public class ItemReportService {
 
     private final edu.uncw.campuslostfound.repository.ItemReportRepository repository;

@@ -1,4 +1,5 @@
 package edu.uncw.campuslostfound.repository;
+import org.springframework.stereotype.Repository;
 
 /**
  * Handles data access for lost and found item reports.
@@ -17,6 +18,7 @@ package edu.uncw.campuslostfound.repository;
  * - Lost item report: Tyler
  * - Found item report: Haley
  */
+@Repository
 public class ItemReportRepository {
 
     private final java.util.List<edu.uncw.campuslostfound.model.ItemReport> reports

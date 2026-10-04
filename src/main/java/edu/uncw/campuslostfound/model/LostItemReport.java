@@ -13,6 +13,10 @@ package edu.uncw.campuslostfound.model;
  */
 public class LostItemReport extends ItemReport {
 
+    public LostItemReport() {
+        super();
+    }
+
     public LostItemReport(String itemName,
                           String category,
                           String date,
