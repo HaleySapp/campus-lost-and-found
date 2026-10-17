@@ -68,6 +68,10 @@ public class ItemReportService {
         repository.save(report);
     }
 
+    public java.util.List<edu.uncw.campuslostfound.model.ItemReport> getAllReports() {
+        return repository.getAllReports();
+    }
+
     private boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();
     }
