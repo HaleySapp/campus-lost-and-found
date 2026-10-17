@@ -3,6 +3,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * Handles requests related to lost and found item reports.
@@ -43,5 +44,10 @@ public class ItemReportController {
         } catch (IllegalArgumentException e) {
             return e.getMessage();
         }
+    }
+
+    @GetMapping
+    public java.util.List<edu.uncw.campuslostfound.model.ItemReport> getMySubmissions() {
+        return service.getAllReports();
     }
 }
