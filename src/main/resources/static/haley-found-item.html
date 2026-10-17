@@ -3,240 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Lost & Found</title>
-
+    <title>Campus Lost &amp; Found — Community Posts</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
-            color: #222;
-        }
-
-        header {
-            background-color: #17324d;
-            color: white;
-            padding: 22px 30px;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 28px;
-        }
-
-        header p {
-            margin: 6px 0 0;
-        }
-
-        main {
-            max-width: 950px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .welcome {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            text-align: center;
-        }
-
-        .welcome h2 {
-            margin-top: 0;
-        }
-
-        button {
-            background-color: #17324d;
-            color: white;
-            border: none;
-            padding: 12px 22px;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #244d72;
-        }
-
-        #posts {
-            display: none;
-            margin-top: 30px;
-        }
-
-        .post {
-            background: white;
-            padding: 22px;
-            margin-bottom: 18px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .post h3 {
-            margin-top: 0;
-        }
-
-        .category {
-            font-size: 14px;
-            font-weight: bold;
-            color: #52606d;
-        }
-
-        .details {
-            color: #555;
-            line-height: 1.6;
-        }
-
-        .match-button {
-            margin-top: 8px;
-        }
-
-        #itemDetails {
-            display: none;
-            background: white;
-            padding: 30px;
-            margin-top: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        #successMessage {
-            display: none;
-            margin-top: 20px;
-            padding: 18px;
-            background-color: #e8f5e9;
-            border-radius: 8px;
-            line-height: 1.5;
-        }
-
-        #errorMessage {
-            display: none;
-            margin-top: 20px;
-            padding: 18px;
-            background-color: #fdecea;
-            border-radius: 8px;
-        }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, sans-serif; background-color: #f4f6f8; color: #222; }
+        header { background-color: #17324d; color: white; padding: 22px 30px; }
+        header h1 { margin: 0; font-size: 28px; }
+        header p { margin: 6px 0 0; }
+        main { max-width: 950px; margin: 40px auto; padding: 0 20px; }
+        .welcome, .post, #itemDetails { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+        .welcome { text-align: center; }
+        .welcome h2 { margin-top: 0; }
+        button { background-color: #17324d; color: white; border: none; padding: 12px 22px; border-radius: 6px; font-size: 16px; cursor: pointer; }
+        button:hover { background-color: #244d72; }
+        #posts, #itemDetails { display: none; margin-top: 30px; }
+        .post { padding: 22px; margin-bottom: 18px; }
+        .post h3 { margin-top: 0; }
+        .category { font-size: 14px; font-weight: bold; color: #52606d; }
+        .details { color: #555; line-height: 1.6; }
+        .match-button { margin-top: 12px; }
+        #successMessage, #errorMessage { display: none; margin-top: 20px; padding: 18px; border-radius: 8px; line-height: 1.5; }
+        #successMessage { background-color: #e8f5e9; }
+        #errorMessage { background-color: #fdecea; }
+        #feedStatus { color: #52606d; }
+        .note { color: #52606d; font-size: 14px; }
+        .choice-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+        .secondary { background-color: #697785; }
     </style>
 </head>
-
 <body>
-
 <header>
-    <h1>Campus Lost & Found</h1>
+    <h1>Campus Lost &amp; Found</h1>
     <p>Community Lost Item Feed</p>
 </header>
-
 <main>
-
     <section class="welcome">
         <h2>Found Something on Campus?</h2>
-
-        <p>
-            Browse recent lost-item posts to see if the item you found
-            matches something reported by another community member.
-        </p>
-
-        <button onclick="showPosts()">View Posts</button>
+        <p>Browse recent lost-item posts to see if the item you found matches something reported by another community member.</p>
+        <button type="button" id="viewPostsButton">View Posts</button>
     </section>
 
-    <section id="posts">
-
+    <section id="posts" aria-label="Lost item reports">
         <h2>Recent Lost Items</h2>
-
-        <div class="post">
-            <div class="category">Water Bottle</div>
-
-            <h3>Blue Hydro Flask</h3>
-
-            <div class="details">
-                <strong>Location Lost:</strong> Library<br>
-                <strong>Color:</strong> Blue<br>
-                <strong>Description:</strong> Blue metal bottle with several stickers.
-            </div>
-
-            <button class="match-button" onclick="openMatchingItem()">
-                View Item
-            </button>
-        </div>
-
-        <div class="post">
-            <div class="category">Electronics</div>
-
-            <h3>Black Wireless Earbuds</h3>
-
-            <div class="details">
-                <strong>Location Lost:</strong> Student Center<br>
-                <strong>Color:</strong> Black<br>
-                <strong>Description:</strong> Wireless earbuds inside a small black charging case.
-            </div>
-
-            <button class="match-button" onclick="showIncorrectMatch()">
-                View Item
-            </button>
-        </div>
-
+        <p class="note">Sprint prototype preview: reports may still be pending security review and are not approved public listings.</p>
+        <p id="feedStatus" role="status"></p>
+        <div id="postsList"></div>
     </section>
 
-    <section id="itemDetails">
-
-        <h2>Blue Hydro Flask</h2>
-
-        <p><strong>Category:</strong> Water Bottle</p>
-        <p><strong>Location Lost:</strong> Library</p>
-        <p><strong>Color:</strong> Blue</p>
-        <p><strong>Description:</strong> Blue metal bottle with several stickers.</p>
-
-        <p>
-            If this description matches the item you found, select
-            <strong>Have Found</strong>.
-        </p>
-
-        <button onclick="confirmFound()">Have Found</button>
-
-        <div id="successMessage">
+    <section id="itemDetails" aria-label="Selected item details">
+        <h2 id="selectedItemName">Item Details</h2>
+        <div id="selectedItemInfo" class="details"></div>
+        <p>Does this description match the item you found?</p>
+        <div class="choice-buttons">
+            <button type="button" id="haveFoundButton">Have Found</button>
+            <button type="button" id="notMatchButton" class="secondary">Not a Match</button>
+            <button type="button" id="backButton" class="secondary">Back to Posts</button>
+        </div>
+        <div id="successMessage" role="status">
             <strong>Thank you!</strong><br><br>
             This item has been identified as a possible match.
-            Please take the found item to the Campus Security Office
-            so staff can verify the item and complete the return process.
+            Please take the found item to the Campus Security Office so staff can verify the item and complete the return process.
         </div>
-
+        <div id="errorMessage" role="alert">
+            <strong>Item does not match.</strong><br>
+            Please return to the community posts and continue searching for the correct lost-item report.
+        </div>
     </section>
-
-    <div id="errorMessage">
-        <strong>Item does not match.</strong><br>
-        Please return to the community posts and continue searching for
-        the correct lost-item report.
-    </div>
-
 </main>
-
 <script>
-    function showPosts() {
-        document.getElementById("posts").style.display = "block";
-        document.getElementById("itemDetails").style.display = "none";
-        document.getElementById("errorMessage").style.display = "none";
+    let reports = [];
+    let selectedReport = null;
+
+    const postsSection = document.getElementById('posts');
+    const itemDetails = document.getElementById('itemDetails');
+    const feedStatus = document.getElementById('feedStatus');
+    const postsList = document.getElementById('postsList');
+    const successMessage = document.getElementById('successMessage');
+    const errorMessage = document.getElementById('errorMessage');
+
+    function addDetail(container, label, value) {
+        const paragraph = document.createElement('p');
+        const strong = document.createElement('strong');
+        strong.textContent = label + ': ';
+        paragraph.append(strong, document.createTextNode(value || 'Not provided'));
+        container.appendChild(paragraph);
     }
 
-    function openMatchingItem() {
-        document.getElementById("posts").style.display = "none";
-        document.getElementById("errorMessage").style.display = "none";
-        document.getElementById("itemDetails").style.display = "block";
+    async function showPosts() {
+        selectedReport = null;
+        postsSection.style.display = 'block';
+        itemDetails.style.display = 'none';
+        successMessage.style.display = 'none';
+        errorMessage.style.display = 'none';
+        postsList.replaceChildren();
+        feedStatus.textContent = 'Loading community posts...';
+
+        try {
+            const response = await fetch('/api/reports', { cache: 'no-store' });
+            if (!response.ok) throw new Error('Request failed');
+            const data = await response.json();
+            if (!Array.isArray(data)) throw new Error('Unexpected response');
+            reports = data;
+            if (reports.length === 0) {
+                feedStatus.textContent = 'No lost-item reports found.';
+                return;
+            }
+            feedStatus.textContent = `${reports.length} report(s) available in this prototype preview.`;
+            reports.forEach((report, index) => {
+                const post = document.createElement('div');
+                post.className = 'post';
+                const category = document.createElement('div');
+                category.className = 'category';
+                category.textContent = report.category || 'Uncategorized';
+                const heading = document.createElement('h3');
+                heading.textContent = report.itemName || 'Unnamed Item';
+                const details = document.createElement('div');
+                details.className = 'details';
+                addDetail(details, 'Location Lost', report.location);
+                addDetail(details, 'Color', report.color);
+                addDetail(details, 'Description', report.description);
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'match-button';
+                button.textContent = 'View Item';
+                button.addEventListener('click', () => openItem(index));
+                post.append(category, heading, details, button);
+                postsList.appendChild(post);
+            });
+        } catch (error) {
+            reports = [];
+            feedStatus.textContent = 'Unable to load community posts. Make sure Spring Boot is running and open this page through localhost:8080.';
+        }
     }
 
-    function showIncorrectMatch() {
-        document.getElementById("itemDetails").style.display = "none";
-        document.getElementById("errorMessage").style.display = "block";
+    function openItem(index) {
+        selectedReport = reports[index];
+        if (!selectedReport) return;
+        postsSection.style.display = 'none';
+        itemDetails.style.display = 'block';
+        successMessage.style.display = 'none';
+        errorMessage.style.display = 'none';
+        document.getElementById('selectedItemName').textContent = selectedReport.itemName || 'Unnamed Item';
+        const info = document.getElementById('selectedItemInfo');
+        info.replaceChildren();
+        addDetail(info, 'Category', selectedReport.category);
+        addDetail(info, 'Date Lost', selectedReport.date);
+        addDetail(info, 'Location Lost', selectedReport.location);
+        addDetail(info, 'Color', selectedReport.color);
+        addDetail(info, 'Brand', selectedReport.brand);
+        addDetail(info, 'Description', selectedReport.description);
+        addDetail(info, 'Status', selectedReport.status);
     }
 
     function confirmFound() {
-        document.getElementById("successMessage").style.display = "block";
+        if (!selectedReport) return;
+        errorMessage.style.display = 'none';
+        successMessage.style.display = 'block';
     }
-</script>
 
+    function showIncorrectMatch() {
+        if (!selectedReport) return;
+        successMessage.style.display = 'none';
+        errorMessage.style.display = 'block';
+    }
+
+    document.getElementById('viewPostsButton').addEventListener('click', showPosts);
+    document.getElementById('haveFoundButton').addEventListener('click', confirmFound);
+    document.getElementById('notMatchButton').addEventListener('click', showIncorrectMatch);
+    document.getElementById('backButton').addEventListener('click', showPosts);
+</script>
 </body>
 </html>
