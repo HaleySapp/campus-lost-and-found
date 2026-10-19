@@ -116,23 +116,56 @@
     </div>
 </main>
 
+
 <script>
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
+    // Run when the user clicks Login
+    document.getElementById("loginForm").addEventListener("submit", async function(event) {
         event.preventDefault();
 
+        // Get the entered login information
         const campusId = document.getElementById("campusId").value;
         const password = document.getElementById("password").value;
+
+        // Get our messages
         const success = document.getElementById("successMessage");
         const error = document.getElementById("errorMessage");
 
-        if (campusId === "sam123" && password === "password123") {
-            error.style.display = "none";
-            success.style.display = "block";
-        } else {
+        try {
+            // Send login information to the backend
+            const response = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    campusId: campusId,
+                    password: password
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("Server error");
+            }
+
+            // Get the result from Java
+            const result = await response.json();
+
+            // Show success or failure
+            if (result.success) {
+                error.style.display = "none";
+                success.style.display = "block";
+            } else {
+                success.style.display = "none";
+                error.style.display = "block";
+            }
+
+        } catch (err) {
             success.style.display = "none";
             error.style.display = "block";
+            console.error("Login request failed:", err);
         }
     });
 </script>
+
 </body>
 </html>
