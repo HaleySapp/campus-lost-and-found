@@ -1,22 +1,20 @@
 package edu.uncw.campuslostfound.repository;
 
-/**
- * Handles data access for system users.
- *
- * Planned responsibilities:
- * - Retrieve user account information
- * - Support authentication requests
- * - Store and retrieve user role information
- *
- * Prototype use:
- * The initial prototype will use mock user account data
- * rather than connecting to the university's real authentication system.
- *
- * Related critical feature:
- * All users can log in.
- *
- * Prototype responsibility: Sam
- */
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserRepository {
 
+    // Stores our test users
+    private final Map<String, String> users = new HashMap<>();
+
+    // Adds a test account
+    public UserRepository() {
+        users.put("sam123", "password123");
+    }
+
+    // Finds the password for a Campus ID
+    public String findPasswordByCampusId(String campusId) {
+        return users.get(campusId);
+    }
 }
