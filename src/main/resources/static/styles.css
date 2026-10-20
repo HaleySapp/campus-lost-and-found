@@ -1,0 +1,91 @@
+
+/* Campus Lost & Found - Shared UNCW Theme */
+
+:root {
+    --navy: #002D5B;
+    --teal: #007680;
+    --gold: #FCC200;
+    --background: #f4f7f8;
+    --white: #ffffff;
+    --text: #222222;
+    --muted: #52606d;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--background);
+    color: var(--text);
+}
+
+header {
+    background-color: var(--navy);
+    color: var(--white);
+    padding: 22px 30px;
+    border-bottom: 5px solid var(--gold);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+header p {
+    margin: 6px 0 0;
+}
+
+main {
+    max-width: 950px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+button {
+    background-color: var(--teal);
+    color: var(--white);
+    border: none;
+    padding: 12px 22px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--navy);
+}
+
+button:focus-visible,
+input:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 2px;
+}
+
+.welcome,
+.post,
+.login-card,
+#itemDetails {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.category {
+    color: var(--teal);
+    font-weight: bold;
+}
+
+.secondary {
+    background-color: #697785;
+}
+
+#successMessage {
+    background-color: #e8f5e9;
+}
+
+#errorMessage {
+    background-color: #fdecea;
+}
