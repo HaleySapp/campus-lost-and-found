@@ -17,6 +17,20 @@ package edu.uncw.campuslostfound.repository;
  *
  * Prototype responsibility: Sam
  */
+
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserRepository {
 
+    private final Map<String, String> users = new HashMap<>();
+
+    public UserRepository() {
+        users.put("sam123", "password123");
+    }
+
+    public String findPasswordByCampusId(String campusId) {
+        return users.get(campusId);
+    }
 }
