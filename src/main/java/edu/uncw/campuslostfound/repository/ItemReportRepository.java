@@ -1,6 +1,10 @@
 package edu.uncw.campuslostfound.repository;
+
+import edu.uncw.campuslostfound.model.ItemReport;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 /**
  * Handles data access for lost and found item reports.
  *
@@ -18,17 +22,11 @@ import org.springframework.stereotype.Repository;
  * - Lost item report: Tyler
  * - Found item report: Haley
  */
+
 @Repository
-public class ItemReportRepository {
+public interface ItemReportRepository extends JpaRepository<ItemReport, Long> {
 
-    private final java.util.List<edu.uncw.campuslostfound.model.ItemReport> reports
-            = new java.util.ArrayList<>();
-
-    public void save(edu.uncw.campuslostfound.model.ItemReport report) {
-        reports.add(report);
-    }
-
-    public java.util.List<edu.uncw.campuslostfound.model.ItemReport> getAllReports() {
-        return reports;
+    default List<ItemReport> getAllReports() {
+        return findAll();
     }
 }

@@ -1,4 +1,12 @@
 package edu.uncw.campuslostfound.model;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 /**
  * Base class for lost and found item reports.
@@ -17,7 +25,12 @@ package edu.uncw.campuslostfound.model;
  * Submitted reports will be reviewed by security staff
  * before becoming publicly searchable.
  */
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class ItemReport {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String itemName;
     private String category;
@@ -28,6 +41,8 @@ public class ItemReport {
     private String description;
     private String photoPath;
     private String contactInfo;
+
+    @Enumerated(EnumType.STRING)
     private ReportStatus status;
 
     public ItemReport() {
@@ -95,6 +110,7 @@ public class ItemReport {
     public ReportStatus getStatus() {
         return status;
     }
+    public Long getId() {return id;}
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
