@@ -1,5 +1,7 @@
 package edu.uncw.campuslostfound.model;
 
+import jakarta.persistence.Entity;
+
 /**
  * Represents a lost item report submitted to the system.
  *
@@ -11,6 +13,8 @@ package edu.uncw.campuslostfound.model;
  *
  * Prototype responsibility: Tyler
  */
+
+@Entity
 public class LostItemReport extends ItemReport {
 
     public LostItemReport() {
