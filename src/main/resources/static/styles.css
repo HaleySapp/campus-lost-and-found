@@ -89,3 +89,28 @@ input:focus-visible {
 #errorMessage {
     background-color: #fdecea;
 }
+
+/* Sprint 2 - Shared Navigation */
+
+.site-nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 14px;
+    background-color: var(--navy);
+}
+
+.site-nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.site-nav a:hover,
+.site-nav a:focus-visible {
+    background-color: var(--teal);
+    color: white;
+}
