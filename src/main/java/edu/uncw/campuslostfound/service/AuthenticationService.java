@@ -17,4 +17,12 @@ public class AuthenticationService {
         // Check if the passwords match
         return storedPassword != null && storedPassword.equals(password);
     }
+    
+    // Get the role assigned to a user
+    public String getRole(String campusId) {
+
+        // Ask the repository for the user's role
+        return userRepository.findRoleByCampusId(campusId);
+    }
+
 }
