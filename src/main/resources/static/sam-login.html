@@ -130,6 +130,12 @@ input:focus {
 
             <button type="submit">Login</button>
         </form>
+        
+<!-- Button to log the user out -->
+<button type="button" id="logoutButton">
+    Log Out
+</button>
+
 
         <div id="successMessage">
             <strong>Login Successful!</strong><br><br>
@@ -151,23 +157,73 @@ input:focus {
     </div>
 </main>
 
+    
 <script>
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
+    document.getElementById("loginForm").addEventListener("submit", async function(event) {
         event.preventDefault();
 
+        // Get what the user typed
         const campusId = document.getElementById("campusId").value;
         const password = document.getElementById("password").value;
+
         const success = document.getElementById("successMessage");
         const error = document.getElementById("errorMessage");
 
-        if (campusId === "sam123" && password === "password123") {
-            error.style.display = "none";
-            success.style.display = "block";
-        } else {
+        try {
+            // Send the login info to the Java backend
+            const response = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ campusId, password })
+            });
+
+            // Get the backend's response
+            const result = await response.json();
+
+            if (result.success) {
+                error.style.display = "none";
+                success.style.display = "block";
+
+                // Take the user to community posts
+                window.location.href = "/haley-found-item.html";
+            } else {
+                success.style.display = "none";
+                error.style.display = "block";
+            }
+
+        } catch (err) {
             success.style.display = "none";
             error.style.display = "block";
+            console.error("Login request failed:", err);
         }
     });
+    
+    // Log the user out when the button is clicked
+    document.getElementById("logoutButton").addEventListener("click", async function() {
+
+        try {
+            // Tell the backend to end the session
+            const response = await fetch("/api/auth/logout", {
+                method: "POST"
+            });
+
+            if (response.ok) {
+                // Return to the login page
+                window.location.href = "/sam-login.html";
+            } else {
+                alert("Logout failed. Please try again.");
+            }
+
+        } catch (err) {
+            console.error("Logout request failed:", err);
+            alert("Could not log out. Please try again.");
+        }
+    });
+
+
 </script>
 </body>
 </html>
+
