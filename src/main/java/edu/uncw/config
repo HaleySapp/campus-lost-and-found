@@ -1,0 +1,66 @@
+
+package edu.uncw.campuslostfound.config;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+
+@Component
+public class LoginRequiredFilter extends OncePerRequestFilter {
+
+    @Override
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain)
+            throws ServletException, IOException {
+
+        // Get the page or API being requested
+        String path = request.getRequestURI()
+                .substring(request.getContextPath().length());
+
+        // Pages that require a login
+        boolean protectedPage =
+                path.equals("/haley-found-item.html") ||
+                path.equals("/tyler-lost-item.html") ||
+                path.equals("/tyler-my-submissions.html");
+
+        // Protect the reports API too
+        boolean protectedApi =
+                path.equals("/api/reports") ||
+                path.startsWith("/api/reports/");
+
+        if (protectedPage || protectedApi) {
+
+            response.setHeader("Cache-Control", "no-store");
+
+            // Check if the user has an active session
+            HttpSession session = request.getSession(false);
+
+            if (session == null ||
+                session.getAttribute("loggedInCampusId") == null) {
+
+                if (protectedApi) {
+                    // Reject unauthorized API requests
+                    response.sendError(401, "Login required");
+                } else {
+                    // Send the user to the login page
+                    response.sendRedirect(
+                            request.getContextPath() + "/sam-login.html"
+                    );
+                }
+                return;
+            }
+        }
+
+        // Continue if the request is allowed
+        filterChain.doFilter(request, response);
+    }
+}
