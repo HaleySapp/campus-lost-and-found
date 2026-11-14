@@ -53,6 +53,32 @@ button:hover {
     color: var(--teal);
 }
 
+.search-container {
+    margin: 20px 0;
+}
+
+.search-container label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: var(--navy);
+}
+
+#searchInput {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #ccd6dd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: white;
+}
+
+#searchInput:focus {
+    outline: none;
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(0, 128, 128, 0.12);
+}
+
     </style>
 </head>
 <body>
@@ -78,6 +104,16 @@ button:hover {
     <section id="posts" aria-label="Lost item reports">
         <h2>Recent Lost Items</h2>
         <p class="note">Sprint prototype preview: reports may still be pending security review and are not approved public listings.</p>
+        <div class="search-container">
+            <label for="searchInput">Search Lost Items</label>
+            <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search by item, category, or location..."
+                    autocomplete="off"
+            >
+        </div>
+
         <p id="feedStatus" role="status"></p>
         <div id="postsList"></div>
     </section>
@@ -110,6 +146,7 @@ button:hover {
     const itemDetails = document.getElementById('itemDetails');
     const feedStatus = document.getElementById('feedStatus');
     const postsList = document.getElementById('postsList');
+    const searchInput = document.getElementById('searchInput');
     const successMessage = document.getElementById('successMessage');
     const errorMessage = document.getElementById('errorMessage');
 
@@ -141,33 +178,63 @@ button:hover {
                 return;
             }
             feedStatus.textContent = `${reports.length} report(s) available in this prototype preview.`;
-            reports.forEach((report, index) => {
-                const post = document.createElement('div');
-                post.className = 'post';
-                const category = document.createElement('div');
-                category.className = 'category';
-                category.textContent = report.category || 'Uncategorized';
-                const heading = document.createElement('h3');
-                heading.textContent = report.itemName || 'Unnamed Item';
-                const details = document.createElement('div');
-                details.className = 'details';
-                addDetail(details, 'Location Lost', report.location);
-                addDetail(details, 'Color', report.color);
-                addDetail(details, 'Description', report.description);
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.className = 'match-button';
-                button.textContent = 'View Item';
-                button.addEventListener('click', () => openItem(index));
-                post.append(category, heading, details, button);
-                postsList.appendChild(post);
-            });
+            renderPosts();
         } catch (error) {
             reports = [];
             feedStatus.textContent = 'Unable to load community posts. Make sure Spring Boot is running and open this page through localhost:8080.';
         }
     }
+    function renderPosts() {
+        const query = searchInput.value.trim().toLowerCase();
+        postsList.replaceChildren();
 
+        let matchCount = 0;
+
+        reports.forEach((report, index) => {
+            const searchableText = [
+                report.itemName,
+                report.category,
+                report.location,
+                report.description,
+                report.color,
+                report.brand
+            ].map(value => String(value ?? '')).join(' ').toLowerCase();
+
+            if (!searchableText.includes(query)) return;
+
+            matchCount++;
+
+            const post = document.createElement('div');
+            post.className = 'post';
+
+            const category = document.createElement('div');
+            category.className = 'category';
+            category.textContent = report.category || 'Uncategorized';
+
+            const heading = document.createElement('h3');
+            heading.textContent = report.itemName || 'Unnamed Item';
+
+            const details = document.createElement('div');
+            details.className = 'details';
+
+            addDetail(details, 'Location Lost', report.location);
+            addDetail(details, 'Color', report.color);
+            addDetail(details, 'Description', report.description);
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'match-button';
+            button.textContent = 'View Item';
+            button.addEventListener('click', () => openItem(index));
+
+            post.append(category, heading, details, button);
+            postsList.appendChild(post);
+        });
+
+        feedStatus.textContent = matchCount === 0
+            ? 'No matching lost-item reports found.'
+            : `${matchCount} matching report(s) found.`;
+    }
     function openItem(index) {
         selectedReport = reports[index];
         if (!selectedReport) return;
@@ -203,6 +270,7 @@ button:hover {
     document.getElementById('haveFoundButton').addEventListener('click', confirmFound);
     document.getElementById('notMatchButton').addEventListener('click', showIncorrectMatch);
     document.getElementById('backButton').addEventListener('click', showPosts);
+    searchInput.addEventListener('input', renderPosts);
 </script>
 </body>
 </html>
