@@ -106,16 +106,37 @@
             contactInfo: document.getElementById("contactInfo").value
         };
 
-        const response = await fetch("/api/reports/lost", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(report)
-        });
+        try {
+            const response = await fetch("/api/reports/lost", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(report)
+            });
 
-        const result = await response.text();
-        message.textContent = result;
+            const result = await response.text();
+
+            if (response.ok) {
+                alert("Submission Successful!\n\nYour lost item report was submitted successfully.");
+
+                message.textContent = "Lost item report submitted successfully.";
+
+                form.reset();
+            } else {
+                alert("Submission Failed!\n\n" + result);
+
+                message.textContent = result;
+            }
+
+        } catch (error) {
+            alert(
+                "Submission Failed!\n\nUnable to connect to the server. Please try again."
+            );
+
+            message.textContent =
+                "Unable to connect to the server. Please try again.";
+        }
     });
 </script>
 </body>

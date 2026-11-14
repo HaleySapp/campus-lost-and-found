@@ -35,14 +35,21 @@ public class ItemReportController {
     }
 
     @PostMapping("/lost")
-    public String submitLostItem(
+    public org.springframework.http.ResponseEntity<String> submitLostItem(
             @RequestBody edu.uncw.campuslostfound.model.LostItemReport report) {
 
         try {
             service.submitLostItem(report);
-            return "Lost item report submitted for security review.";
+
+            return org.springframework.http.ResponseEntity.ok(
+                    "Lost item report submitted for security review."
+            );
+
         } catch (IllegalArgumentException e) {
-            return e.getMessage();
+
+            return org.springframework.http.ResponseEntity
+                    .badRequest()
+                    .body(e.getMessage());
         }
     }
 
