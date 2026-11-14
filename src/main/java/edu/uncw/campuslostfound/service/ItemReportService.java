@@ -36,33 +36,39 @@ public class ItemReportService {
             throw new IllegalArgumentException("Lost item report is required.");
         }
 
-        if (isBlank(report.getItemName())) {
-            throw new IllegalArgumentException("Item name is required.");
-        }
+        java.util.List<String> invalidFields = new java.util.ArrayList<>();
 
-        if (isBlank(report.getCategory())) {
-            throw new IllegalArgumentException("Category is required.");
-        }
+        validateRequiredField(report.getItemName(), "Item Name", invalidFields);
+        validateRequiredField(report.getCategory(), "Category", invalidFields);
+        validateRequiredField(report.getDate(), "Date Lost", invalidFields);
+        validateRequiredField(report.getLocation(), "Location", invalidFields);
+        validateRequiredField(report.getColor(), "Color", invalidFields);
+        validateRequiredField(report.getBrand(), "Brand", invalidFields);
+        validateRequiredField(report.getDescription(), "Description", invalidFields);
 
-        if (isBlank(report.getDate())) {
-            throw new IllegalArgumentException("Date lost is required.");
-        }
+        validateSafeField(report.getContactInfo(), "Contact Information", invalidFields);
+        validateSafeField(report.getPhotoPath(), "Photo", invalidFields);
 
-        if (isBlank(report.getLocation())) {
-            throw new IllegalArgumentException("Location is required.");
-        }
-
-        if (isBlank(report.getColor())) {
-            throw new IllegalArgumentException("Color is required.");
-        }
-
-        if (isBlank(report.getBrand())) {
-            throw new IllegalArgumentException("Brand is required.");
-        }
-
-        if (isBlank(report.getDescription())) {
+        if (!invalidFields.isEmpty()) {
             throw new IllegalArgumentException(
-                    "Description or distinguishing characteristics are required.");
+                    "Submission failed. Please review: "
+                            + String.join(", ", invalidFields));
+        }
+
+        report.setItemName(report.getItemName().trim());
+        report.setCategory(report.getCategory().trim());
+        report.setDate(report.getDate().trim());
+        report.setLocation(report.getLocation().trim());
+        report.setColor(report.getColor().trim());
+        report.setBrand(report.getBrand().trim());
+        report.setDescription(report.getDescription().trim());
+
+        if (report.getContactInfo() != null) {
+            report.setContactInfo(report.getContactInfo().trim());
+        }
+
+        if (report.getPhotoPath() != null) {
+            report.setPhotoPath(report.getPhotoPath().trim());
         }
 
         repository.save(report);
@@ -70,6 +76,39 @@ public class ItemReportService {
 
     public java.util.List<edu.uncw.campuslostfound.model.ItemReport> getAllReports() {
         return repository.getAllReports();
+    }
+
+    private void validateRequiredField(
+            String value,
+            String fieldName,
+            java.util.List<String> invalidFields) {
+
+        if (isBlank(value)) {
+            invalidFields.add(fieldName + " is required");
+            return;
+        }
+
+        validateSafeField(value, fieldName, invalidFields);
+    }
+
+    private void validateSafeField(
+            String value,
+            String fieldName,
+            java.util.List<String> invalidFields) {
+
+        if (value == null || value.isBlank()) {
+            return;
+        }
+
+        String lowerValue = value.toLowerCase();
+
+        if (value.contains("<")
+                || value.contains(">")
+                || lowerValue.contains("javascript:")
+                || lowerValue.contains("<script")) {
+
+            invalidFields.add(fieldName + " contains unsafe input");
+        }
     }
 
     private boolean isBlank(String value) {
