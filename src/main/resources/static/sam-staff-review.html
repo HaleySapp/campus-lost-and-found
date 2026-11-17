@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Security Staff - Report Review</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<nav class="site-nav">
+    <a href="/haley-found-item.html">Community Posts</a>
+    <a href="/tyler-lost-item.html">Report Lost Item</a>
+    <a href="/tyler-my-submissions.html">My Submissions</a>
+    <a href="/sam-login.html">Login</a>
+</nav>
+
+<header>
+    <h1>Security Staff - Report Review</h1>
+    <p>Review and approve pending lost item reports.</p>
+</header>
+
+<main>
+    <h2>Pending Reports</h2>
+    <div id="reports"></div>
+    <p id="message"></p>
+</main>
+
+<script>
+    // Load reports waiting for approval
+    async function loadReports() {
+        const container = document.getElementById("reports");
+        const message = document.getElementById("message");
+
+        container.replaceChildren();
+        message.textContent = "Loading reports...";
+
+        try {
+            const response = await fetch("/api/staff/reports/pending");
+
+            if (!response.ok) {
+                message.textContent = "Access denied or login required.";
+                return;
+            }
+
+            const reports = await response.json();
+            message.textContent = "";
+
+            if (reports.length === 0) {
+                message.textContent = "No reports waiting for approval.";
+                return;
+            }
+
+            for (const report of reports) {
+                const div = document.createElement("div");
+                div.className = "login-card";
+                div.style.marginBottom = "20px";
+
+                const title = document.createElement("h3");
+                title.textContent = report.itemName;
+
+                const location = document.createElement("p");
+                location.textContent = "Location: " + report.location;
+
+                const status = document.createElement("p");
+                status.textContent = "Status: " + report.status;
+
+                const button = document.createElement("button");
+                button.textContent = "Approve Report";
+
+                button.addEventListener("click", async function() {
+                    button.disabled = true;
+
+                    try {
+                        const result = await fetch(
+                            "/api/staff/reports/" + report.id + "/approve",
+                            { method: "POST" }
+                        );
+
+                        if (result.ok) {
+                            message.textContent = "Report approved successfully!";
+                            await loadReports();
+                        } else {
+                            message.textContent = "Approval failed.";
+                            button.disabled = false;
+                        }
+                    } catch (error) {
+                        message.textContent = "Unable to contact server.";
+                        button.disabled = false;
+                    }
+                });
+
+                div.append(title, location, status, button);
+                container.appendChild(div);
+            }
+        } catch (error) {
+            message.textContent = "Unable to load reports.";
+        }
+    }
+
+    loadReports();
+</script>
+
+</body>
+</html>
