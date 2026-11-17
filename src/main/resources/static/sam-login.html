@@ -135,6 +135,12 @@ input:focus {
 <button type="button" id="logoutButton">
     Log Out
 </button>
+<!-- Button to open the Security Staff Review page -->
+<button type="button" id="staffReviewButton"
+        style="display: none;"
+        onclick="window.location.href='/sam-staff-review.html'">
+    Security Staff Review
+</button>
 
 
         <div id="successMessage">
@@ -183,12 +189,21 @@ input:focus {
             const result = await response.json();
 
             if (result.success) {
-                error.style.display = "none";
-                success.style.display = "block";
+    error.style.display = "none";
+    success.style.display = "block";
 
-                // Take the user to community posts
-                window.location.href = "/haley-found-item.html";
-            } else {
+    // Check which role logged in
+    const statusResponse = await fetch("/api/auth/status");
+    const loginStatus = await statusResponse.json();
+
+    // Send Security Staff to their review page
+    if (loginStatus.role === "SECURITY_STAFF") {
+        window.location.href = "/sam-staff-review.html";
+    } else {
+        // Regular users go to Community Posts
+        window.location.href = "/haley-found-item.html";
+    }
+} else {
                 success.style.display = "none";
                 error.style.display = "block";
             }
@@ -222,6 +237,32 @@ input:focus {
         }
     });
 
+    // Check if Security Staff is logged in
+async function checkStaffAccess() {
+    const button = document.getElementById("staffReviewButton");
+
+    // Keep the button hidden unless staff access is confirmed
+    button.style.display = "none";
+
+    try {
+        const response = await fetch("/api/auth/status");
+
+        if (!response.ok) {
+            return;
+        }
+
+        const data = await response.json();
+
+        // Only show the button to Security Staff
+        if (data.authenticated && data.role === "SECURITY_STAFF") {
+            button.style.display = "block";
+        }
+    } catch (error) {
+        console.error("Unable to check staff access:", error);
+    }
+}
+
+checkStaffAccess();
 
 </script>
 </body>
