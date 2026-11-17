@@ -24,6 +24,19 @@ public class AuthController {
         // Get what the user typed
         String campusId = request.get("campusId");
         String password = request.get("password");
+        // Check that the login information is valid
+        if (campusId == null || password == null ||
+                campusId.isBlank() || password.isBlank() ||
+                campusId.length() > 50 || password.length() > 100) {
+                    
+            // Clear any previous login
+            session.invalidate();
+
+            return Map.of(
+                    "success", false,
+                    "message", "Invalid login information."
+            );
+        }
 
         // Check the login information
         boolean success = authService.login(campusId, password);
